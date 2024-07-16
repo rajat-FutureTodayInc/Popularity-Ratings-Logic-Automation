@@ -233,6 +233,9 @@ def automate_excel(data_file, average_rating_file, automate):
     results = {col: check_value_exists(Outlier_Check, col, 1, 0, 17) for col in Outlier_Check.columns}
     Outlier = pd.DataFrame([results.values()], columns=results.keys())
 
+    Outlier['Views'] = 1
+    Outlier['Search Launches'] = 1
+
     
     Normalised = pd.DataFrame()
 
