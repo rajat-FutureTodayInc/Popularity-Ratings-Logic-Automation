@@ -68,7 +68,7 @@ def automate_excel(data_file, average_rating_file, automate):
         df1 = Internal_Factors.iloc[:, 0:5]
         df2 = External_Factors.iloc[:, 8:10]
         df3 = Normalised.iloc[:, [0, 5, 8, 10, 12, 14, 16]]
-        df4 = Score.iloc[:, [5, 7]]
+        df4 = Score.iloc[:, [6, 8]]
         df = pd.concat([df1, df2, df3, df4], axis = 1)
 
         desc = desc_func(df)
@@ -122,8 +122,14 @@ def automate_excel(data_file, average_rating_file, automate):
                 row['Internal_Factors'] = 1
                 row['External_Factors'] = 0
                 row['External Score'] = 0
-            elif row['Views/Day in a month'] >= 5:
-                row['External Score'] = row['Average of Popularity Rating']
+            #elif row['Views/Day in a month'] >= 5:
+             #   row['External Score'] = row['Average of Popularity Rating']
+        return row
+
+    def update_scores_scaled(row):
+        if pd.isna(row['External Score Scaled 1']):
+            if row['Views/Day in a month'] >= 5 and row['Views/Day in a month'] < 35:
+                row['External Score Scaled 1'] = row['Average of Exnternal Score Scaled 1']
         return row
     
     def update_popularityRating(row):
@@ -329,13 +335,16 @@ def automate_excel(data_file, average_rating_file, automate):
 
     Score = changePos(Score, 'Average of Popularity Rating', 1)
 
+    Score = changePos(Score, 'Average of Exnternal Score Scaled 1', 2)
+
     Score = Score.apply(update_scores, axis=1)
 
     Score['External Score Scaled 1'] = Score_Scaling(Score, 'External Score')
 
+    Score = Score.apply(update_scores_scaled, axis=1)
+
     Score['Flat-Fee?'] = data['Flat-Fee?']
-
-
+    
     Score['Days Live on Channel'] = data['DAR End Date'] - data['Submission Date']
 
     Score['Days Live on Channel'] = Score['Days Live on Channel'].dt.days
@@ -354,9 +363,9 @@ def automate_excel(data_file, average_rating_file, automate):
     
     Final_Rank = pd.DataFrame()
 
-    Final_Rank = Score.iloc[:, [0, 1, 2, 10, 6, 8, 3, 4, 11]]
+    Final_Rank = Score.iloc[:, [0, 1, 2, 3, 11, 7, 9, 4, 5, 12]]
 
-    Final_Rank.columns = ['UID', 'Average of Popularity Rating', 'Views/Day in a month', 'Days Live on Channel', 'Internal Score', 'External Score', '%Internal Factors', '%External Factors', 
+    Final_Rank.columns = ['UID', 'Average of Popularity Rating', 'Average of Exnternal Score Scaled 1', 'Views/Day in a month', 'Days Live on Channel', 'Internal Score', 'External Score', '%Internal Factors', '%External Factors', 
                           'Final Score']
 
     Final_Rank.loc[:, 'Rank'] = Final_Rank['Final Score'].rank(method='min', ascending=False) - 1
