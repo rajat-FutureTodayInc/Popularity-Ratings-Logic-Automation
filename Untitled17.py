@@ -403,6 +403,8 @@ def automate_excel(data_file, average_rating_file, automate):
         updateDesc()
 
     Final_Rank = pd.concat([data.iloc[:, [1, 5, 6]], Final_Rank], axis = 1)
+
+    Final_Rank['Popularity Rating'] = Final_Rank['Popularity Rating'].fillna(20)
         
     
     return Final_Rank
