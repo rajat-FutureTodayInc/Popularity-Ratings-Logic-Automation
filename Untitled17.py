@@ -376,6 +376,8 @@ def automate_excel(data_file, average_rating_file, automate):
 
     Final_Rank = Final_Rank.apply(update_popularityRating, axis=1)
 
+    Final_Rank['Popularity Rating'] = Final_Rank['Popularity Rating'].fillna(20)
+
     Final_Rank['Stars on UI'] = np.where(
                                     Final_Rank['Popularity Rating']+20 >= 80,
                                     5,
@@ -403,8 +405,6 @@ def automate_excel(data_file, average_rating_file, automate):
         updateDesc()
 
     Final_Rank = pd.concat([data.iloc[:, [1, 5, 6]], Final_Rank], axis = 1)
-
-    Final_Rank['Popularity Rating'] = Final_Rank['Popularity Rating'].fillna(20)
         
     
     return Final_Rank
