@@ -411,7 +411,7 @@ def automate_excel(data_file, average_rating_file, automate):
     
       
 # Streamlit app
-st.title('Logic Report Automation')
+st.title('Popularity Ratings Logic Automation')
 
 st.write("Please upload the files for processing:")
 
