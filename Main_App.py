@@ -354,7 +354,7 @@ def automate_excel(data_file, average_rating_file, automate):
                             Score['Flat-Fee?']*2)
 
     Score['Final Score Scaled'] = np.where(
-        (Score['Days Live on Channel'] > 60) & (Internal_Factors['Views/Day in a month'] < 20),
+        (Score['Days Live on Channel'] > 30) & (Internal_Factors['Views/Day in a month'] < 20),
         np.minimum((((Score['Final Score'] - 40) / (100 - 40)) * (105 - 20)) + 20, 64),
         (((Score['Final Score'] - 40) / (100 - 40)) * (105 - 20)) + 20
     )
